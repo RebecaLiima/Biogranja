@@ -93,6 +93,22 @@ class Galinheiro
         return $this->galinhasCorte;
     }
 
+    public function getGalinheiros()
+    {
+        $sql = "SELECT tipo, racao FROM tb_galinheiro";
+        $query = $this->db->prepare($sql);
+        $query->execute();
 
+        return $query->fetchAll();
+    }
+
+    public function addFuncionario($tipo, $racao)
+    {
+        $sql = "INSERT INTO tb_galinheiro (tipo, racao) VALUES (:tipo, :racao)";
+        $query = $this->db->prepare($sql);
+        $parameters = array(':tipo' => $tipo, ':racao' => $racao);
+
+        $query->execute($parameters);
+    }
 
 }

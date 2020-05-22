@@ -15,13 +15,6 @@ class Usuario
      * @param $login
      * @param $senha
      */
-    public function __construct($tipo, $nome, $login, $senha)
-    {
-        $this->tipo = $tipo;
-        $this->nome = $nome;
-        $this->login = $login;
-        $this->senha = $senha;
-    }
 
     /**
      * @return mixed
@@ -87,6 +80,23 @@ class Usuario
         $this->senha = $senha;
     }
 
-    
+    public function getUsuarios()
+    {
+        $sql = "SELECT login, nome, senha, tipo FROM tb_usuario";
+        $query = $this->db->prepare($sql);
+        $query->execute();
+
+        return $query->fetchAll();
+    }
+
+    public function addUsuario($login, $nome, $senha, $tipo)
+    {
+        $sql = "INSERT INTO tb_usuario (login, nome, senha, tipo) VALUES (:login, :nome, :senha, :tipo)";
+        $query = $this->db->prepare($sql);
+        $parameters = array(':login' => $login, ':nome' => $nome, ':senha' => $senha, ':tipo' =>$tipo);
+
+        $query->execute($parameters);
+    }
+
 
 }

@@ -13,15 +13,13 @@ class Granja
      * @param $funcionarios
      * @param $galinheiros
      */
-    public function __construct($nome, $funcionarios, $galinheiro)
+    public function __construct($nome)
     {
         $this->nome = $nome;
-        $this->funcionarios = $funcionarios;
-        $this->galinheiro = $galinheiro;
     }
     //Cria um funcionario e o insere na lista
-    public function addFuncionario($id,$nome,$cargo){
-        array_push($funcionarios, new Funcionario($id,$nome,$cargo));
+    public function addFuncionario($nome,$cargo){
+        array_push($funcionarios, new Funcionario($nome,$cargo));
     }
 
     /**
@@ -40,39 +38,37 @@ class Granja
         $this->nome = $nome;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFuncionarios()
+    public function getGranjas()
     {
-        return $this->funcionarios;
+        $sql = "SELECT login, nome, senha, tipo FROM tb_granja";
+        $query = $this->db->prepare($sql);
+        $query->execute();
+
+        return $query->fetchAll();
     }
 
-    /**
-     * @param mixed $funcionarios
-     */
-    public function setFuncionarios($funcionarios)
+    public function addGranja($nome)
     {
-        $this->funcionarios = $funcionarios;
+        $sql = "INSERT INTO tb_granja (nome) VALUES (:nome)";
+        $query = $this->db->prepare($sql);
+        $parameters = array(':nome' => $nome,);
+
+        $query->execute($parameters);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getGalinheiro()
+    public function getGranja($nome)
     {
-        return $this->galinheiro;
+        $sql = "SELECT id, nome FROM tb_granja WHERE nome = :nome";
+        $query = $this->db->prepare($sql);
+        $parameters = array(':nome' => $nome);
+
+        // útil para debugar: você pode ver o SQL atrás da construção usando:
+        // echo '[ PDO DEBUG ]: ' . Helper::debugPDO($sql, $parameters);  exit();
+
+        $query->execute($parameters);
+
+        // fetch() é o método do PDO que recebe exatamente um registro
+        return ($query->rowcount() ? $query->fetch() : false);
     }
-
-    /**
-     * @param mixed $galinheiro
-     */
-    public function setGalinheiro($galinheiro)
-    {
-        $this->galinheiro = $galinheiro;
-    }
-
-
-
 
 }

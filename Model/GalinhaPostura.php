@@ -3,7 +3,7 @@
 
 class GalinhaPostura
 {
-    private $id;
+
     private $colocouOvo;
     private $tempoOvo;
     private $primeiraVez;
@@ -11,7 +11,6 @@ class GalinhaPostura
 
     /**
      * Galinha constructor.
-     * @param $id
      * @param $colocouOvo
      * @param $tempoOvo
      * @param $primeiraVez
@@ -98,6 +97,24 @@ class GalinhaPostura
     public function setUltimaVez($ultimaVez)
     {
         $this->ultimaVez = $ultimaVez;
+    }
+
+    public function getGalinhasdePostura()
+    {
+        $sql = "SELECT colocouOvo, tempoOvo, primeiraVez, ultimaVez, galinheiro FROM tb_galinhaPostura";
+        $query = $this->db->prepare($sql);
+        $query->execute();
+
+        return $query->fetchAll();
+    }
+
+    public function addGalinhasdePostura($colocouOvo, $tempoOvo, $primeiraVez, $ultimaVez, $galinheiro)
+    {
+        $sql = "INSERT INTO tb_galinheiro (colocouOvo, tempoOvo, primeiraVez, ultimaVez, galinheiro) VALUES (:colocouOvo, :tempoOvo, :primeiraVez, :ultimaVez, :galinheiro)";
+        $query = $this->db->prepare($sql);
+        $parameters = array(':colocouOvo' => $colocouOvo, ':tempoOvo' => $tempoOvo, ':primeiraVez' => $primeiraVez, ':ultimaVez' => $ultimaVez, 'galinheiro' => $galinheiro);
+
+        $query->execute($parameters);
     }
 
 

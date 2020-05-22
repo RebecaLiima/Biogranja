@@ -3,23 +3,10 @@
 
 class GalinhaCorte
 {
-    private $id;
     //sugestão: padrão de tempo fixo, ex: meses;
     private $tempoNoGalinheiro; //Como a regra de negócio relacionado ao abate está na quantidade de ração do galinheiro, basta saber o tempo que a galinha tem consumido a ração para saber se ela está pronta ou não para o abate
     private $status; //"pronto para o abate", ou "não pronto para o abate"
-
-    /**
-     * GalinhaCorte constructor.
-     * @param $id
-     * @param $tempoNoGalinheiro
-     * @param $status
-     */
-    public function __construct($id, $tempoNoGalinheiro, $status)
-    {
-        $this->id = $id;
-        $this->tempoNoGalinheiro = $tempoNoGalinheiro;
-        $this->status = $status;
-    }
+    private $galinheiro;
 
     /**
      * @return mixed
@@ -61,6 +48,22 @@ class GalinhaCorte
         return $this->id;
     }
 
+    public function getGalinhasdeCorte()
+    {
+        $sql = "SELECT tempoNoGalinheiro, status, galinheiro FROM tb_galinhaCorte";
+        $query = $this->db->prepare($sql);
+        $query->execute();
 
+        return $query->fetchAll();
+    }
+
+    public function addGalinhaCorte($tempoNoGalinheiro, $status, $galinheiro)
+    {
+        $sql = "INSERT INTO tb_galinheiro (tempoNoGalinheiro, status, galinheiro) VALUES (:tempoNoGalinheiro, :status, :galinheiro)";
+        $query = $this->db->prepare($sql);
+        $parameters = array(':tempoNoGalinheiro' => $tempoNoGalinheiro, ':status' => $status, ':galinheiro' => $galinheiro);
+
+        $query->execute($parameters);
+    }
 
 }
